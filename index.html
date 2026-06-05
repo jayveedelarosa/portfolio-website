@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jayvee C. Dela Rosa — CS student at PLM, building with AI and Cloud.">
+  <meta property="og:title" content="Jayvee Dela Rosa · Portfolio">
+  <meta property="og:description" content="CS student at Pamantasan ng Lungsod ng Maynila. Building with AI and Cloud.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jayveedelarosa.dev/">
+  <meta property="og:image" content="https://jayveedelarosa.dev/images/profile/jayveecdelarosa-profile-picture.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jayvee Dela Rosa · Portfolio">
+  <meta name="twitter:description" content="CS student at Pamantasan ng Lungsod ng Maynila. Building with AI and Cloud.">
+  <meta name="twitter:image" content="https://jayveedelarosa.dev/images/profile/jayveecdelarosa-profile-picture.png">
+  <link rel="canonical" href="https://jayveedelarosa.dev/">
+  <title>Jayvee Dela Rosa · Portfolio</title>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Jayvee C. Dela Rosa",
+    "url": "https://jayveedelarosa.dev/",
+    "image": "https://jayveedelarosa.dev/images/profile/jayveecdelarosa-profile-picture.png",
+    "jobTitle": "Computer Science Student",
+    "affiliation": { "@type": "Organization", "name": "Pamantasan ng Lungsod ng Maynila" },
+    "email": "jayveecalozadelarosa@gmail.com",
+    "sameAs": [
+      "https://www.linkedin.com/in/jayveedelarosa/",
+      "https://github.com/jayveedelarosa"
+    ]
+  }
+  </script>
+
+
+  <!-- Preconnect for faster font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+  <!-- Site Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+  <!-- ============================================================
+       LIGHTBOX
+       ============================================================ -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button id="lightbox-close" aria-label="Close image viewer"><i class="fa fa-times" aria-hidden="true"></i></button>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
+
+  <!-- ============================================================
+       TOP UTILITY BAR
+       ============================================================ -->
+  <header id="topbar-util">
+    <div class="util-logo">
+      <i class="fa fa-user-circle" aria-hidden="true"></i>
+      JV.
+    </div>
+    <div class="util-services">
+      <i class="fa fa-th" aria-hidden="true"></i> Portfolio
+    </div>
+
+
+    <div class="util-right">
+      <!-- Theme Toggle -->
+      <button class="util-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle color theme">
+        <i class="fa fa-moon" id="theme-icon" aria-hidden="true"></i>
+        <span id="theme-label">Light</span>
+      </button>
+
+
+      <!-- Notification Bell -->
+      <button class="util-btn" id="notif-btn" title="Notifications" aria-label="Notifications" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-bell" aria-hidden="true"></i>
+        <span class="notif-indicator" id="notif-indicator" aria-hidden="true"></span>
+      </button>
+
+
+      <!-- User Name -->
+      <button class="util-btn util-btn--user" id="username-btn" aria-label="Edit display name" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        <span id="username-display">Your Name</span>
+        <i class="fa fa-chevron-down util-chevron" aria-hidden="true"></i>
+      </button>
+
+
+      <!-- Notification Dropdown -->
+      <div class="notif-dropdown" id="notif-dropdown" role="menu" aria-label="Notifications">
+        <div class="notif-header">Notifications</div>
+        <div class="notif-item" role="menuitem">
+          <div class="notif-icon-wrap"><i class="fa fa-rocket" aria-hidden="true"></i></div>
+          <div class="notif-content">
+            <div class="notif-title">System Reality Check</div>
+            <div class="notif-msg">This portfolio scales better than my sleep schedule.</div>
+          </div>
+          <div class="notif-time">1 min ago</div>
+        </div>
+      </div>
+
+
+      <!-- Username Dropdown -->
+      <div class="username-dropdown" id="username-dropdown" role="dialog" aria-label="Edit display name">
+        <div class="username-dd-header">Edit Display Name</div>
+        <div class="username-dd-body">
+          <div class="username-dd-label">Display name (1–9 characters)</div>
+          <div class="username-dd-input-wrap">
+            <input class="username-dd-input" type="text" id="username-input"
+              placeholder="Your Name" maxlength="9" autocomplete="off">
+            <button class="username-dd-clear" id="username-cancel" title="Discard changes" aria-label="Discard changes">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="username-dd-error" id="username-error" role="alert">Name must be 1–9 characters.</div>
+          <div class="username-dd-hint">Press Enter to save</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       MOBILE TOP NAV
+       ============================================================ -->
+  <nav id="mobile-topnav" aria-label="Mobile navigation">
+    <div class="mobile-nav-inner">
+      <a class="mobile-nav-link active" data-section="about" href="#about">
+        <i class="fa fa-user" aria-hidden="true"></i> About
+      </a>
+      <a class="mobile-nav-link" data-section="projects" href="#projects">
+        <i class="fa fa-code" aria-hidden="true"></i> Projects
+      </a>
+      <a class="mobile-nav-link" data-section="certificates" href="#certificates">
+        <i class="fa fa-certificate" aria-hidden="true"></i> Certificates
+      </a>
+      <a class="mobile-nav-link" data-section="education" href="#education">
+        <i class="fa fa-graduation-cap" aria-hidden="true"></i> Education
+      </a>
+      <a class="mobile-nav-link" data-section="contact" href="#contact">
+        <i class="fa fa-envelope" aria-hidden="true"></i> Contact
+      </a>
+      <a class="mobile-nav-link" data-section="architecture" href="#architecture">
+        <i class="fa fa-sitemap" aria-hidden="true"></i> Architecture
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       SIDEBAR (DESKTOP)
+       ============================================================ -->
+  <nav id="sidebar" aria-label="Desktop navigation">
+    <div class="nav-section-label">Navigation</div>
+
+
+    <a class="nav-link active" data-section="about" href="#about">
+      <i class="fa fa-user" aria-hidden="true"></i> About Me
+    </a>
+    <a class="nav-link" data-section="projects" href="#projects">
+      <i class="fa fa-code" aria-hidden="true"></i> Projects
+    </a>
+    <a class="nav-link" data-section="certificates" href="#certificates">
+      <i class="fa fa-certificate" aria-hidden="true"></i> Certificates
+    </a>
+    <a class="nav-link" data-section="education" href="#education">
+      <i class="fa fa-graduation-cap" aria-hidden="true"></i> Education
+    </a>
+    <a class="nav-link" data-section="contact" href="#contact">
+      <i class="fa fa-envelope" aria-hidden="true"></i> Contact
+    </a>
+
+
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Documentation</div>
+
+
+    <a class="nav-link" data-section="architecture" href="#architecture">
+      <i class="fa fa-sitemap" aria-hidden="true"></i> System Architecture
+    </a>
+
+
+    <div class="sidebar-footer">
+      <div class="nav-section-label nav-section-label--footer">Region</div>
+      <div class="sidebar-region">
+        <i class="fa fa-globe" aria-hidden="true"></i>
+        NCR, Philippines
+      </div>
+      <button class="theme-toggle" id="theme-toggle-sidebar" aria-label="Toggle color theme">
+        <i class="fa fa-moon" id="theme-icon-sidebar" aria-hidden="true"></i>
+        <span id="theme-label-sidebar">Switch to Light</span>
+      </button>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       MAIN CONTENT
+       ============================================================ -->
+  <main id="main">
+
+
+    <!-- ==================== ABOUT ==================== -->
+    <section id="about" class="section active" aria-label="About Me">
+      <div class="page-header">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <span>Portfolio</span>
+          <span class="breadcrumb-sep" aria-hidden="true">/</span>
+          <span class="breadcrumb-current">About Me</span>
+        </nav>
+        <div class="page-actions">
+          <a class="btn btn-primary" href="https://docs.google.com/document/d/1DPaI6tAEKK9NoVvi2LjZCTAFh2VUjj0iyWWeuPo1KNY/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+            <i class="fa fa-download" aria-hidden="true"></i> Resume
+          </a>
+        </div>
+      </div>
+
+
+      <div class="section-inner">
+        <div class="about-grid reveal">
+
+
+          <!-- Profile Column -->
+          <div class="panel profile-panel">
+            <div class="panel-header">
+              <i class="fa fa-id-card panel-header__icon" aria-hidden="true"></i>
+              <div class="panel-title">Profile</div>
+              <span class="status-badge">Active</span>
+            </div>
+            <div class="panel-body panel-body--centered">
+              <div class="profile-avatar">
+                <img src="images/profile/jayveecdelarosa-profile-picture.png" alt="Jayvee C. Dela Rosa">
+              </div>
+              <div class="profile-name">Jayvee C. Dela Rosa</div>
+              <div class="profile-role">/* Building with AI &amp; Cloud<br>BSCS 1st year */</div>
+              <div class="profile-email">
+                <i class="fa fa-at" aria-hidden="true"></i>
+                <a href="mailto:jayveecalozadelarosa@gmail.com">jayveecalozadelarosa@gmail.com</a>
+              </div>
+              <div class="profile-divider"></div>
+              <div class="social-row">
+                <a class="social-chip" href="https://www.linkedin.com/in/jayveedelarosa/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+                  <i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn
+                </a>
+                <a class="social-chip" href="https://github.com/jayveedelarosa" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                  <i class="fab fa-github" aria-hidden="true"></i> GitHub
+                </a>
+                <a class="social-chip" href="https://www.facebook.com/JvCDr" target="_blank" rel="noopener noreferrer" aria-label="Facebook profile">
+                  <i class="fab fa-facebook" aria-hidden="true"></i> Facebook
+                </a>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Right Column -->
+          <div class="about-right">
+            <div class="panel reveal reveal-delay-1">
+              <div class="panel-header">
+                <i class="fa fa-info-circle panel-header__icon" aria-hidden="true"></i>
+                <div class="panel-title">Overview</div>
+              </div>
+              <div class="panel-body">
+                <p class="overview-text">
+                  Hi there! I'm a passionate Computer Science student at Pamantasan ng Lungsod ng Maynila,
+                  driven by a deep curiosity for how technology shapes the world. I like to create
+                  scalable systems, explore AI technologies, and craft high-quality prompts that drive intelligent and effective AI outputs for real-world applications. Currently seeking opportunities to apply my skills
+                  in challenging and impactful environments.
+                </p>
+              </div>
+            </div>
+
+
+            <div class="panel reveal reveal-delay-2">
+              <div class="panel-header">
+                <i class="fa fa-star panel-header__icon" aria-hidden="true"></i>
+                <div class="panel-title">Areas of Interest</div>
+              </div>
+              <div class="panel-body">
+                <div class="interests-grid">
+                  <div class="interest-item">
+                    <div class="interest-icon"><i class="fa fa-brain" aria-hidden="true"></i></div>
+                    Artificial Intelligence
+                  </div>
+                  <div class="interest-item">
+                    <div class="interest-icon"><i class="fa fa-cloud" aria-hidden="true"></i></div>
+                    Cloud Architecture
+                  </div>
+                  <div class="interest-item">
+                    <div class="interest-icon"><i class="fa fa-comment-dots" aria-hidden="true"></i></div>
+                    Prompt Engineering
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== PROJECTS ==================== -->
+    <section id="projects" class="section" aria-label="Projects">
+      <div class="page-header">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <span>Portfolio</span>
+          <span class="breadcrumb-sep" aria-hidden="true">/</span>
+          <span class="breadcrumb-current">Projects</span>
+        </nav>
+        <div class="page-actions">
+          <span class="meta-count" id="projects-count"></span>
+        </div>
+      </div>
+      <div class="section-inner">
+        <div class="section-title reveal">Projects</div>
+        <div class="section-subtitle reveal">Here are some of my projects</div>
+
+
+        <div class="projects-grid">
+
+
+          <article class="project-card reveal" aria-label="Project One">
+            <div class="project-img-wrap"
+                 data-url="https://public-speaking-coach-jayvee-frontend.s3.us-east-1.amazonaws.com/index.html"
+                 role="button" tabindex="0" aria-label="Open Project One website">
+              <img class="project-img"
+         src="images/projects/public-speaking-coach-proj.png"
+         alt="Screenshot of Public Speaking Coach"
+         loading="lazy">
+            </div>
+            <div class="project-body">
+              <h3 class="project-name">AI-POWERED PUBLIC SPEAKING COACH</h3>
+              <p class="project-desc">
+                The Public Speaking Coach helps users improve their speaking by analyzing audio recordings to detect filler words, measure words per minute, and generate AI-driven feedback in under a minute. Built with a serverless AWS stack (S3, Lambda,  Amazon Transcribe, DynamoDB, API Gateway) and the OpenAI API, it processes each speech at low cost (≈<$0.001 per analysis) through an event-driven pipeline. As a result, it delivers fast, personalized coaching insights that make public speaking improvement scalable and data-driven.
+              </p>
+              <div class="project-tags" aria-label="Technologies used">
+                <span class="project-tag">AWS</span>
+                <span class="project-tag">OpenAI API</span>
+                <span class="project-tag">Python</span>
+              </div>
+              <div class="project-btns">
+                <button class="btn btn-primary" data-url="https://public-speaking-coach-jayvee-frontend.s3.us-east-1.amazonaws.com/index.html">
+                  <i class="fa fa-external-link-alt" aria-hidden="true"></i> Website
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== CERTIFICATES ==================== -->
+    <section id="certificates" class="section" aria-label="Certificates">
+      <div class="page-header">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <span>Portfolio</span>
+          <span class="breadcrumb-sep" aria-hidden="true">/</span>
+          <span class="breadcrumb-current">Certificates</span>
+        </nav>
+        <div class="page-actions">
+          <span class="meta-count" id="certs-count"></span>
+        </div>
+      </div>
+      <div class="section-inner">
+        <div class="section-title reveal">Certificates</div>
+        <div class="section-subtitle reveal">Professional certifications and credentials</div>
+
+
+        <div class="certs-grid">
+
+
+          <article class="cert-card reveal" aria-label="AWS Cloud Practitioner Essentials">
+            <div class="cert-img-wrap"
+                 data-cert="images/certificates/aws-cloud-practitioner-essentials-cert.png" 
+                 role="button" tabindex="0" aria-label="View AWS Cloud Practitioner Essentials"> <!-- PLACE 1 -->
+              <img src="images/certificates/aws-cloud-practitioner-essentials-cert.png"
+                 alt="AWS Cloud Practitioner Essentials"
+                 loading="lazy"> <!-- PLACE 2 -->
+            </div>
+            <div class="cert-body">
+              <h3 class="cert-name">AWS Cloud Practitioner Essentials</h3>
+              <div class="cert-issuer">Amazon Web Services · Feb 2026</div>
+              <div class="cert-btns">
+                <button class="btn btn-primary cert-btn--view cert-btn--full" data-cert="images/certificates/aws-cloud-practitioner-essentials-cert.png"> <!-- PLACE 3 -->
+                  <i class="fa fa-image" aria-hidden="true"></i> Certificate
+                </button> 
+              </div>
+            </div>
+          </article>
+
+          <article class="cert-card reveal reveal-delay-1" aria-label="AWS Cloud Quest: Cloud Practitioner - Training Badge">
+            <div class="cert-img-wrap cert-img-wrap--badge"
+                 data-cert="images/certificates/aws-cloud-quest-cloud-practitioner-training-badge.png" 
+                 role="button" tabindex="0" aria-label="View AWS Cloud Quest: Cloud Practitioner - Training Badge"> <!-- PLACE 1 -->
+              <img src="images/certificates/aws-cloud-quest-cloud-practitioner-training-badge.png"
+                 alt="AWS Cloud Quest: Cloud Practitioner - Training Badge"
+                 loading="lazy"> <!-- PLACE 2 -->
+            </div>
+            <div class="cert-body">
+              <h3 class="cert-name">AWS Cloud Quest: Cloud Practitioner - Training Badge</h3>
+              <div class="cert-issuer">Amazon Web Services · Jan 2026</div>
+              <div class="cert-btns">
+                <button class="btn btn-primary cert-btn--view" data-cert="images/certificates/aws-cloud-quest-cloud-practitioner-training-badge.png"> <!-- PLACE 3 -->
+                  <i class="fa fa-image" aria-hidden="true"></i> Certificate
+                </button>
+                <button class="btn btn-ghost" data-url="https://www.credly.com/badges/47206cee-e77c-4bf3-bd1f-bae96fe79ce2/linked_in_profile">
+                  <i class="fa fa-check-circle" aria-hidden="true"></i> Verify
+                </button> 
+              </div>
+            </div>
+          </article>
+
+          <article class="cert-card reveal reveal-delay-2" aria-label="Elements of AI">
+            <div class="cert-img-wrap"
+                 data-cert="images/certificates/elements-of-ai-cert.png" 
+                 role="button" tabindex="0" aria-label="View Elements of AI"> <!-- PLACE 1 -->
+              <img src="images/certificates/elements-of-ai-cert.png"
+                 alt="Elements of AI"
+                 loading="lazy"> <!-- PLACE 2 -->
+            </div>
+            <div class="cert-body">
+              <h3 class="cert-name">Elements of AI</h3>
+              <div class="cert-issuer">University of Helsinki · Jan 2026</div>
+              <div class="cert-btns">
+                <button class="btn btn-primary cert-btn--view cert-btn--full" data-cert="images/certificates/elements-of-ai-cert.png"> <!-- PLACE 3 -->
+                  <i class="fa fa-image" aria-hidden="true"></i> Certificate
+                </button> 
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== EDUCATION ==================== -->
+    <section id="education" class="section" aria-label="Education">
+      <div class="page-header">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <span>Portfolio</span>
+          <span class="breadcrumb-sep" aria-hidden="true">/</span>
+          <span class="breadcrumb-current">Education</span>
+        </nav>
+      </div>
+      <div class="section-inner">
+        <div class="section-title reveal">Education</div>
+        <div class="section-subtitle reveal">Academic background and qualifications</div>
+
+
+        <div class="education-timeline">
+
+
+          <div class="edu-item reveal">
+            <div class="edu-dot-wrap">
+              <div class="edu-dot"></div>
+            </div>
+            <div class="edu-card">
+              <div class="edu-date"><i class="fa fa-calendar-alt" aria-hidden="true"></i> Aug 2025 – Present</div>
+              <div class="edu-school">Pamantasan ng Lungsod ng Maynila</div>
+              <div class="edu-degree">Bachelor of Science in Computer Science</div>
+              <div class="edu-badges">
+                <span class="edu-badge">Cumulative GWA: 1.25/1.00</span>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="edu-item reveal reveal-delay-1">
+            <div class="edu-dot-wrap">
+              <div class="edu-dot edu-dot--alt"></div>
+            </div>
+            <div class="edu-card">
+              <div class="edu-date"><i class="fa fa-calendar-alt" aria-hidden="true"></i> June 2019 – Apr 2025</div>
+              <div class="edu-school">Eulogio Rodriguez Jr. High School</div>
+              <div class="edu-degree">Junior &amp; Senior High School</div>
+              <div class="edu-badges">
+                <span class="edu-badge">GWA: 98%</span>
+                <span class="edu-badge">With Highest Honor</span>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="edu-item reveal reveal-delay-2">
+            <div class="edu-dot-wrap">
+              <div class="edu-dot edu-dot--alt2"></div>
+            </div>
+            <div class="edu-card">
+              <div class="edu-date"><i class="fa fa-calendar-alt" aria-hidden="true"></i> June 2012 – Apr 2019</div>
+              <div class="edu-school">Demetrio Tuazon Elementary School</div>
+              <div class="edu-degree">Elementary School</div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== CONTACT ==================== -->
+    <section id="contact" class="section" aria-label="Contact">
+      <div class="page-header">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <span>Portfolio</span>
+          <span class="breadcrumb-sep" aria-hidden="true">/</span>
+          <span class="breadcrumb-current">Contact</span>
+        </nav>
+      </div>
+      <div class="section-inner">
+        <div class="section-title reveal">Contact</div>
+        <div class="section-subtitle reveal">Send a message or reach out directly</div>
+
+
+        <div class="contact-outer">
+          <div class="contact-panel panel reveal">
+            <div class="panel-header">
+              <i class="fa fa-envelope panel-header__icon" aria-hidden="true"></i>
+              <div class="panel-title">Send Message</div>
+            </div>
+            <div class="panel-body">
+              <p class="contact-intro">
+                I'm <strong>open for opportunities</strong>, whether it's a project collaboration,
+                internship, or just a conversation about tech. Drop me a message below.
+              </p>
+
+
+              <form id="contact-form" class="contact-form" novalidate>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="c-name">
+                      Name <span class="form-required" aria-hidden="true">*</span>
+                    </label>
+                    <input class="form-input" type="text" id="c-name" name="name"
+                      placeholder="Your full name" autocomplete="name" required
+                      aria-required="true" aria-describedby="err-name">
+                    <div class="form-error" id="err-name" role="alert">Name must be 2–50 characters.</div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="c-email">
+                      Email Address <span class="form-required" aria-hidden="true">*</span>
+                    </label>
+                    <input class="form-input" type="email" id="c-email" name="email"
+                      placeholder="you@example.com" autocomplete="email" required
+                      aria-required="true" aria-describedby="err-email">
+                    <div class="form-error" id="err-email" role="alert">Please enter a valid email.</div>
+                  </div>
+                </div>
+
+
+                <div class="form-group">
+                  <label class="form-label" for="c-message">
+                    Message <span class="form-required" aria-hidden="true">*</span>
+                  </label>
+                  <textarea class="form-textarea" id="c-message" name="message"
+                    placeholder="Write your message here..." required
+                    aria-required="true" aria-describedby="err-msg char-count"></textarea>
+                  <div class="form-footer">
+                    <div class="form-error" id="err-msg" role="alert">Message must be 20–2000 characters.</div>
+                    <div class="char-count" id="char-count" aria-live="polite">0 / 2000</div>
+                  </div>
+                </div>
+
+                <div class="rate-limit-msg" id="rate-limit-msg" role="alert" aria-live="polite"></div>
+
+                <div class="form-submit-row">
+                  <button type="submit" class="btn btn-primary btn--send" id="btn-send">
+                    <i class="fa fa-paper-plane" aria-hidden="true"></i> Send Message
+                  </button>
+                  <div class="form-success" id="form-success" role="status" aria-live="polite">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                    Message sent! I'll get back to you soon.
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== SYSTEM ARCHITECTURE ==================== -->
+    <section id="architecture" class="section" aria-label="System Architecture">
+      <div class="page-header">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <span>Portfolio</span>
+          <span class="breadcrumb-sep" aria-hidden="true">/</span>
+          <span>Documentation</span>
+          <span class="breadcrumb-sep" aria-hidden="true">/</span>
+          <span class="breadcrumb-current">System Architecture</span>
+        </nav>
+      </div>
+      <div class="section-inner">
+        <div class="arch-wrap">
+          <div class="section-title reveal">System Architecture</div>
+          <div class="section-subtitle reveal">Technical documentation and infrastructure overview</div>
+
+
+          <div class="panel reveal">
+            <div class="panel-body panel-body--arch">
+
+
+              <div class="arch-meta">
+                <div class="arch-date"><i class="fa fa-calendar" aria-hidden="true"></i> April 1, 2026</div>
+                <span class="arch-tag">Web Dev</span>
+                <span class="arch-tag">Architecture</span>
+                <span class="arch-tag">AWS</span>
+              </div>
+
+
+              <div class="arch-content">
+
+
+                <h3 class="reveal">How this Site was Built</h3>
+                <p class="reveal reveal-delay-1">
+                  This portfolio is a single-file HTML application hosted on a custom domain. It was designed
+                  with a structured, enterprise-grade aesthetic, built from scratch with vanilla HTML, CSS, and
+                  JavaScript. No heavy frameworks, no build tools. The goal was to keep the codebase lean, fast,
+                  and fully maintainable without complex tooling.
+                </p>
+
+
+                <div class="arch-img-placeholder reveal reveal-delay-2">
+                  <i class="fa fa-diagram-project" aria-hidden="true"></i>
+                  <span>[ Architecture Diagram Placeholder ]</span>
+                </div>
+
+
+                <h3 class="reveal">Infrastructure Overview</h3>
+                <p class="reveal reveal-delay-1">
+                  The site leverages AWS services for robustness and scalability. Static assets are hosted
+                  on Amazon S3 with CloudFront as the CDN layer, ensuring global low-latency delivery.
+                  Route 53 manages the DNS routing for the root domain and project subdomains.
+                  The contact form integrates with AWS Lambda and Amazon SES for reliable, serverless email delivery.
+                </p>
+                <p class="reveal reveal-delay-2">
+                  Each project lives on its own subdomain (e.g., <code>project.yourname.dev</code>),
+                  independently deployed and versioned. This approach enables clean separation of concerns
+                  and allows individual projects to scale without affecting the main portfolio.
+                </p>
+
+
+                <div class="arch-img-placeholder reveal reveal-delay-3">
+                  <i class="fa fa-network-wired" aria-hidden="true"></i>
+                  <span>[ Infrastructure Diagram Placeholder ]</span>
+                </div>
+
+
+                <h3 class="reveal">Design Philosophy</h3>
+                <p class="reveal reveal-delay-1">
+                  The design language draws inspiration from enterprise dashboard interfaces, prioritizing
+                  readability and hierarchy over decoration. The color system uses deep navy backgrounds
+                  with measured use of orange, blue, and teal accents to guide attention without distraction.
+                  Every interaction is intentional and restrained.
+                </p>
+                <p class="reveal reveal-delay-2">
+                  Future enhancements planned: a CMS integration for frictionless content updates,
+                  analytics via AWS CloudWatch, and a dedicated blog section for longer technical writing.
+                  The architecture was designed from the start to accommodate these additions gracefully.
+                </p>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+
+  <!-- ============================================================
+       STATUS BAR
+       ============================================================ -->
+  <div id="statusbar" role="status" aria-live="polite">
+    <div class="status-item">
+      <div class="status-dot" aria-hidden="true"></div>
+      Portfolio Online
+    </div>
+    <span class="status-sep" aria-hidden="true">|</span>
+    <div class="status-item" id="status-section">About Me</div>
+    <span class="status-sep" aria-hidden="true">|</span>
+    <div class="status-item">Region: PH-NCR</div>
+  </div>
+
+
+  <!-- Site Script — loaded last so DOM is ready -->
+  <script src="script.js"></script>
+
+
+</body>
+</html>
+

@@ -83,7 +83,6 @@ body.light {
 
 html {
   font-size: 16px;
-  height: 100%;
 }
 
 
@@ -94,7 +93,7 @@ body {
   font-weight: 400;
   line-height: 1.65;
   overflow-x: hidden;
-  height: 100%;
+  min-height: 100vh;
 }
 
 
@@ -663,7 +662,7 @@ body.light .notif-indicator {
 #main {
   margin-left: var(--nav-w);
   margin-top: 44px;
-  height: calc(100vh - 44px);
+  min-height: calc(100vh - 44px);
   position: relative;
 }
 
@@ -674,9 +673,7 @@ body.light .notif-indicator {
 .section {
   display: none;
   padding: 0 0 48px;
-  height: 100%;
   background: var(--bg);
-  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -1917,11 +1914,10 @@ body.light .notif-indicator {
   #mobile-topnav { display: block; }
 
 
-  #main       { margin-left: 0; margin-top: calc(44px + var(--topnav-h)); height: calc(100vh - 44px - var(--topnav-h)); }
+  #main       { margin-left: 0; margin-top: calc(44px + var(--topnav-h)); min-height: calc(100vh - 44px - var(--topnav-h)); }
   #statusbar  { left: 0; }
 
 
-  .section      { height: 100%; }
   .section-inner { padding: 20px 16px 40px; }
   .page-header  { padding: 12px 16px; }
 

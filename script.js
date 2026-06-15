@@ -92,9 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
      ========================================================== */
   function showSection(id) {
     allSections.forEach(function (s) {
-      const isActive = s.id === id;
-      s.classList.toggle('active', isActive);
-      if (isActive) s.scrollTop = 0;
+      s.classList.toggle('active', s.id === id);
     });
 
     window.scrollTo(0, 0);

@@ -393,6 +393,7 @@ body.light .notif-indicator {
 
 .username-dd-input {
   flex: 1;
+  min-width: 0;
   padding: 5px 8px;
   border-radius: var(--radius);
   border: 1px solid var(--border2);

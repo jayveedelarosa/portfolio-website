@@ -13,3 +13,6 @@ node_modules/
 
 # Claude Code
 .claude/
+
+# Backend docs (local only)
+backend/*.md

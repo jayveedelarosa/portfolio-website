@@ -1,25 +1,3 @@
-"""
-Contact form backend for jayveedelarosa.dev
-
-What this does, step by step:
-  1. Receives the form data (name, email, message, website) from API Gateway.
-  2. Checks the honeypot field ("website") — if it's filled in, a bot
-     submitted this directly to the API, skipping the website entirely.
-     We quietly pretend it worked so the bot doesn't learn it was caught.
-  3. Re-checks the same rules the website already checks (name length,
-     email format, message length). The browser's checks can be bypassed,
-     so this function must never trust the request blindly.
-  4. Sends the message as an email via SES, with "Reply-To" set to the
-     visitor's email so replying in Gmail goes straight to them.
-  5. Always returns {"success": true} or {"success": false, "error": "..."}
-     — this is the exact shape script.js already expects.
-
-Environment variables (set these in the Lambda console, see SETUP-GUIDE.md):
-  SENDER_ADDRESS    - the verified SES "from" address, e.g. noreply@jayveedelarosa.dev
-  RECIPIENT_ADDRESS - where the email should land, e.g. your Gmail address
-  ALLOWED_ORIGIN    - your site's origin, e.g. https://jayveedelarosa.dev
-"""
-
 import json
 import os
 import re

@@ -11,8 +11,9 @@
  *  7. Contact Form
  *  8. Notifications
  *  9. Username System
- * 10. Global Event Listeners (click-outside, keyboard)
- * 11. Init
+ * 10. Site Search
+ * 11. Global Event Listeners (click-outside, keyboard)
+ * 12. Init
  */
 
 
@@ -607,7 +608,260 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   /* ==========================================================
-     10. GLOBAL EVENT LISTENERS
+     10. SITE SEARCH
+        Ctrl+F-style search across every section. Picking a result
+        switches to its section, scrolls to the match, and briefly
+        highlights it on the page.
+     ========================================================== */
+  const searchWrap    = document.getElementById('site-search');
+  const searchInput   = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
+  const searchKbd     = document.getElementById('search-kbd');
+
+  const SEARCH_MIN_CHARS   = 2;
+  const SEARCH_MAX_RESULTS = 20;
+  const SEARCH_SNIPPET_PAD = 40;
+  const SEARCH_HIT_MS      = 3000;
+
+  // Text inside these is hidden, status-only, or repeated elsewhere
+  const SEARCH_SKIP = '.breadcrumb, .hp-field, .form-error, .rate-limit-msg, .form-success, .char-count';
+
+  const sectionIcons = {
+    about:        'fa-user',
+    projects:     'fa-code',
+    certificates: 'fa-certificate',
+    education:    'fa-graduation-cap',
+    contact:      'fa-envelope',
+    architecture: 'fa-sitemap'
+  };
+
+  let searchMatches  = [];
+  let searchActive   = -1;
+  let searchHitTimer = null;
+
+  if (/Mac|iPhone|iPad/.test(navigator.platform)) searchKbd.textContent = '[⌘K]';
+  if (window.matchMedia('(max-width: 560px)').matches) searchInput.placeholder = 'Search portfolio';
+
+
+  // One result per occurrence. Matches must start at a word boundary, so
+  // "aws" skips "draws" but "cloud" still finds "CloudFront".
+  function findMatches(query) {
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = new RegExp('(?<![\\p{L}\\p{N}])' + escaped, 'giu');
+    const matches = [];
+
+    allSections.forEach(function (sec) {
+      const walker = document.createTreeWalker(sec, NodeFilter.SHOW_TEXT, {
+        acceptNode: function (node) {
+          if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          if (node.parentElement.closest(SEARCH_SKIP)) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+
+      let node;
+      while ((node = walker.nextNode())) {
+        for (const m of node.nodeValue.matchAll(pattern)) {
+          matches.push({ section: sec.id, node: node, index: m.index, length: m[0].length });
+        }
+      }
+    });
+
+    return matches;
+  }
+
+
+  // Built with DOM nodes (not innerHTML) because the query is user input
+  function buildSnippet(match) {
+    const text   = match.node.nodeValue;
+    const start  = Math.max(0, match.index - SEARCH_SNIPPET_PAD);
+    const end    = Math.min(text.length, match.index + match.length + SEARCH_SNIPPET_PAD);
+    const squash = function (s) { return s.replace(/\s+/g, ' '); };
+
+    const before = (start > 0 ? '…' : '') + squash(text.slice(start, match.index)).trimStart();
+    const after  = squash(text.slice(match.index + match.length, end)).trimEnd() + (end < text.length ? '…' : '');
+
+    const mark = document.createElement('mark');
+    mark.textContent = text.substr(match.index, match.length);
+
+    const frag = document.createDocumentFragment();
+    frag.append(before, mark, after);
+    return frag;
+  }
+
+
+  function setSearchActive(i) {
+    const items = searchResults.querySelectorAll('.search-result');
+    if (!items.length) return;
+
+    searchActive = (i + items.length) % items.length;
+    items.forEach(function (item, n) {
+      item.classList.toggle('active', n === searchActive);
+      item.setAttribute('aria-selected', String(n === searchActive));
+    });
+    searchInput.setAttribute('aria-activedescendant', items[searchActive].id);
+    items[searchActive].scrollIntoView({ block: 'nearest' });
+  }
+
+
+  function renderSearchResults(query) {
+    searchResults.replaceChildren();
+    searchActive = -1;
+    searchInput.removeAttribute('aria-activedescendant');
+
+    if (!searchMatches.length) {
+      const empty = document.createElement('div');
+      empty.className   = 'search-empty';
+      empty.textContent = 'No results for "' + query + '"';
+      searchResults.appendChild(empty);
+      openSearch();
+      return;
+    }
+
+    const shown  = searchMatches.slice(0, SEARCH_MAX_RESULTS);
+    const header = document.createElement('div');
+    header.className   = 'search-dd-header';
+    header.textContent = shown.length < searchMatches.length
+      ? 'Showing ' + shown.length + ' of ' + searchMatches.length + ' results'
+      : searchMatches.length + ' result' + (searchMatches.length !== 1 ? 's' : '');
+    searchResults.appendChild(header);
+
+    shown.forEach(function (match, i) {
+      const item = document.createElement('div');
+      item.className = 'search-result';
+      item.id        = 'search-result-' + i;
+      item.setAttribute('role', 'option');
+      item.setAttribute('aria-selected', 'false');
+
+      const icon = document.createElement('div');
+      icon.className = 'search-result__icon';
+      icon.innerHTML = '<i class="fa ' + sectionIcons[match.section] + '" aria-hidden="true"></i>';
+
+      const body    = document.createElement('div');
+      const label   = document.createElement('div');
+      const snippet = document.createElement('div');
+      body.className      = 'search-result__body';
+      label.className     = 'search-result__section';
+      label.textContent   = sectionNames[match.section] || match.section;
+      snippet.className   = 'search-result__snippet';
+      snippet.appendChild(buildSnippet(match));
+      body.append(label, snippet);
+
+      item.append(icon, body);
+      item.addEventListener('mousemove', function () {
+        if (searchActive !== i) setSearchActive(i);
+      });
+      item.addEventListener('click', function () { goToMatch(i); });
+      searchResults.appendChild(item);
+    });
+
+    openSearch();
+  }
+
+
+  function openSearch() {
+    searchResults.classList.add('open');
+    searchInput.setAttribute('aria-expanded', 'true');
+  }
+
+
+  function closeSearch() {
+    searchResults.classList.remove('open');
+    searchInput.setAttribute('aria-expanded', 'false');
+    searchInput.removeAttribute('aria-activedescendant');
+    searchActive = -1;
+  }
+
+
+  function clearSearchHit() {
+    clearTimeout(searchHitTimer);
+    document.querySelectorAll('mark.search-hit').forEach(function (mark) {
+      const parent = mark.parentNode;
+      parent.replaceChild(document.createTextNode(mark.textContent), mark);
+      parent.normalize();
+    });
+  }
+
+
+  function runSearch() {
+    // Unwrap old highlights first so text nodes are whole again before searching
+    clearSearchHit();
+    const query = searchInput.value.trim();
+
+    if (query.length < SEARCH_MIN_CHARS) {
+      searchMatches = [];
+      closeSearch();
+      return;
+    }
+
+    searchMatches = findMatches(query);
+    renderSearchResults(query);
+  }
+
+
+  function goToMatch(i) {
+    const match = searchMatches[i];
+    if (!match || !match.node.isConnected) return;
+
+    closeSearch();
+    searchInput.blur();
+
+    if (!document.getElementById(match.section).classList.contains('active')) {
+      showSection(match.section);
+    }
+
+    const range = document.createRange();
+    range.setStart(match.node, match.index);
+    range.setEnd(match.node, match.index + match.length);
+
+    const mark = document.createElement('mark');
+    mark.className = 'search-hit';
+    range.surroundContents(mark);
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    mark.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    searchHitTimer = setTimeout(clearSearchHit, SEARCH_HIT_MS);
+  }
+
+
+  searchInput.addEventListener('input', runSearch);
+
+  searchInput.addEventListener('focus', function () {
+    if (notifOpen)  closeNotif();
+    if (userDdOpen) closeUsernameDd(false);
+    if (searchInput.value.trim().length >= SEARCH_MIN_CHARS) runSearch();
+  });
+
+  // Results keep focus in the input via mousedown below, so blur means "left search"
+  searchInput.addEventListener('blur', closeSearch);
+  searchResults.addEventListener('mousedown', function (e) { e.preventDefault(); });
+  searchWrap.addEventListener('click', function (e) { e.stopPropagation(); });
+
+  searchInput.addEventListener('keydown', function (e) {
+    const isOpen = searchResults.classList.contains('open');
+
+    if (e.key === 'ArrowDown' && isOpen) {
+      e.preventDefault();
+      setSearchActive(searchActive + 1);
+    } else if (e.key === 'ArrowUp' && isOpen) {
+      e.preventDefault();
+      setSearchActive(searchActive - 1);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      goToMatch(searchActive >= 0 ? searchActive : 0);
+    } else if (e.key === 'Escape') {
+      if (searchInput.value) {
+        searchInput.value = '';
+        runSearch();
+      } else {
+        searchInput.blur();
+      }
+    }
+  });
+
+
+  /* ==========================================================
+     11. GLOBAL EVENT LISTENERS
      ========================================================== */
   document.addEventListener('click', function () {
     if (notifOpen)  closeNotif();
@@ -616,6 +870,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   document.addEventListener('keydown', function (e) {
+    // Ctrl+K / Cmd+K — jump to the search bar
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      searchInput.focus();
+      searchInput.select();
+      return;
+    }
+
     if (e.key === 'Escape') {
       closeLightbox();
       if (notifOpen)  closeNotif();
@@ -625,7 +887,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   /* ==========================================================
-     11. INIT
+     12. INIT
      ========================================================== */
 
   // Dynamic item counts — reads actual DOM card count so the

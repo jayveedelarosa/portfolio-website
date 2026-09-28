@@ -229,6 +229,195 @@ body.light #topbar-util {
 
 
 /* ============================================================
+   SITE SEARCH (TOP BAR)
+   ============================================================ */
+.util-search {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 520px;
+  /* Matches the JV. → Portfolio spacing (6px logo margin + 10px Portfolio padding) */
+  margin-left: 6px;
+  display: flex;
+  align-items: center;
+}
+
+
+.util-search__icon {
+  position: absolute;
+  left: 10px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+}
+
+
+.util-search__input {
+  width: 100%;
+  height: 30px;
+  padding: 0 72px 0 30px;
+  background: #0f1b2a;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 4px;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 0.8rem;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+
+.util-search__input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* Hide the browser's native clear "x" — Escape clears instead */
+.util-search__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+
+.util-search__input:focus {
+  border-color: #ff9900;
+  box-shadow: 0 0 0 1px #ff9900;
+}
+
+
+.util-search__kbd {
+  position: absolute;
+  right: 10px;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+
+.util-search__input:focus ~ .util-search__kbd {
+  display: none;
+}
+
+
+.search-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  max-height: min(420px, 70vh);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 3000;
+}
+
+
+.search-dropdown.open {
+  display: block;
+}
+
+
+.search-dd-header {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+
+.search-result {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background var(--transition);
+}
+
+
+.search-result:hover,
+.search-result.active {
+  background: var(--surface2);
+  border-left-color: var(--accent);
+}
+
+
+.search-result__icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 0.75rem;
+}
+
+
+.search-result__body {
+  min-width: 0;
+}
+
+
+.search-result__section {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+.search-result__snippet {
+  font-size: 0.8rem;
+  color: var(--text2);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+
+.search-result__snippet mark {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 600;
+  border-radius: 2px;
+}
+
+
+.search-empty {
+  padding: 18px 14px;
+  font-size: 0.8rem;
+  color: var(--text2);
+  text-align: center;
+}
+
+
+/* In-page highlight on the element the user jumped to */
+mark.search-hit {
+  background: var(--accent-glow);
+  color: inherit;
+  border-radius: 2px;
+  box-shadow: 0 0 0 2px var(--accent-glow);
+  animation: search-hit-pulse 1.2s ease 2;
+}
+
+
+@keyframes search-hit-pulse {
+  50% { background: var(--accent); color: #fff; }
+}
+
+
+/* ============================================================
    NOTIFICATION SYSTEM
    ============================================================ */
 .notif-indicator {
@@ -1948,7 +2137,15 @@ body.light .notif-indicator {
   html { font-size: 15px; }
   .form-input,
   .form-textarea,
-  .username-dd-input { font-size: 16px; }
+  .username-dd-input,
+  .util-search__input { font-size: 16px; }
+  .util-services,
+  .util-search__kbd,
+  #theme-label     { display: none; }
+  #topbar-util     { gap: 6px; padding: 0 10px; }
+  .util-search__input { padding-right: 10px; }
+  .search-dropdown { position: fixed; top: 52px; left: 10px; right: 10px; }
+  .util-btn        { padding: 3px 7px; }
   .interests-grid  { grid-template-columns: 1fr 1fr; }
   .project-btns    { flex-direction: column; }
   .arch-wrap       { padding: 0; }

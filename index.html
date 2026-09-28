@@ -33,6 +33,11 @@
   </script>
 
 
+  <!-- Security Headers (frontend-enforced via meta; CloudFront/server headers are out of scope) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self'; connect-src 'self' https://roill6m399.execute-api.ap-southeast-1.amazonaws.com; base-uri 'self'; form-action 'self' https://roill6m399.execute-api.ap-southeast-1.amazonaws.com; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+
   <!-- Preconnect for faster font loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -543,7 +548,7 @@
                       Name <span class="form-required" aria-hidden="true">*</span>
                     </label>
                     <input class="form-input" type="text" id="c-name" name="name"
-                      placeholder="Your full name" autocomplete="name" required
+                      placeholder="Your full name" autocomplete="name" required maxlength="50"
                       aria-required="true" aria-describedby="err-name">
                     <div class="form-error" id="err-name" role="alert">Name must be 2–50 characters.</div>
                   </div>
@@ -552,7 +557,7 @@
                       Email Address <span class="form-required" aria-hidden="true">*</span>
                     </label>
                     <input class="form-input" type="email" id="c-email" name="email"
-                      placeholder="you@example.com" autocomplete="email" required
+                      placeholder="you@example.com" autocomplete="email" required maxlength="254"
                       aria-required="true" aria-describedby="err-email">
                     <div class="form-error" id="err-email" role="alert">Please enter a valid email.</div>
                   </div>
@@ -564,12 +569,18 @@
                     Message <span class="form-required" aria-hidden="true">*</span>
                   </label>
                   <textarea class="form-textarea" id="c-message" name="message"
-                    placeholder="Write your message here..." required
+                    placeholder="Write your message here..." required maxlength="2000"
                     aria-required="true" aria-describedby="err-msg char-count"></textarea>
                   <div class="form-footer">
                     <div class="form-error" id="err-msg" role="alert">Message must be 20–2000 characters.</div>
                     <div class="char-count" id="char-count" aria-live="polite">0 / 2000</div>
                   </div>
+                </div>
+
+                <div class="form-group hp-field" aria-hidden="true">
+                  <label class="form-label" for="c-website" tabindex="-1">Website</label>
+                  <input class="form-input" type="text" id="c-website" name="website"
+                    tabindex="-1" autocomplete="off">
                 </div>
 
                 <div class="rate-limit-msg" id="rate-limit-msg" role="alert" aria-live="polite"></div>

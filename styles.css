@@ -1542,6 +1542,19 @@ body.light .notif-indicator {
 }
 
 
+/* Honeypot field — visually hidden off-screen (anti-bot).
+   Avoids display:none / visibility:hidden / opacity:0 so bots that
+   check computed style for those properties still fill it in. */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+
 .form-label {
   font-size: 0.8rem;
   font-weight: 500;

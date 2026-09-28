@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const charCount   = document.getElementById('char-count');
   const btnSend     = document.getElementById('btn-send');
   const successBox  = document.getElementById('form-success');
+  const honeypotInput = document.getElementById('c-website');
 
 
   /* ==========================================================
@@ -290,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let cooldownTimer   = null;
 
   // ── API Endpoint ───────────────────────────────────────────────────────────
-  const API_ENDPOINT = 'https://wvj6qecu19.execute-api.ap-southeast-1.amazonaws.com/contact';
+  const API_ENDPOINT = 'https://roill6m399.execute-api.ap-southeast-1.amazonaws.com/contact';
 
   // ── Extra Element References ───────────────────────────────────────────────
   const rateLimitMsg = document.getElementById('rate-limit-msg');
@@ -411,6 +412,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         successBox.classList.remove('show');
         hideMessage();
+
+        // Honeypot Check — if this hidden field has a value, a bot filled it
+        // in. Silently pretend success without calling the API or revealing
+        // the trap.
+        if (honeypotInput && honeypotInput.value.trim() !== '') {
+          contactForm.reset();
+          charCount.textContent = '0 / 2000';
+          charCount.classList.remove('over');
+          successBox.classList.add('show');
+          setTimeout(function () { successBox.classList.remove('show'); }, 6000);
+          return;
+        }
 
         // Rate Limit Check 1: Session Cap
         if (submissionCount >= MAX_SUBMISSIONS) {
